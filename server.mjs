@@ -1,0 +1,13 @@
+import { configDotenv } from "dotenv";
+import express from "express";
+import mongoose from "mongoose";
+import subscribersRouter from "./routes/subscribers.mjs";
+configDotenv();
+mongoose.connect(process.env.DATABASE_URL);
+const db = mongoose.connection;
+const app = express();
+db.on("error", (err) => console.error(err));
+db.once("open", () => console.log("conncted to database"));
+app.use(express.json());
+app.use("/subscribers", subscribersRouter);
+app.listen(3000, () => console.log("sever running"));
